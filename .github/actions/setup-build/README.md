@@ -37,11 +37,11 @@ Vault/WIF hang (see that action's README).
 
 |               Input               |                               Description                                | Required |  Default  |
 |-----------------------------------|--------------------------------------------------------------------------|----------|-----------|
-| camunda-nexus                     | Use Camunda Nexus as a Maven mirror (disabled for fork PRs)              | false    | `"true"`  |
-| dockerhub                         | Log into DockerHub with a CI account (disabled for fork PRs)             | false    | `"false"` |
+| camunda-nexus                     | Use Camunda Nexus as a Maven mirror (disabled for forks)                 | false    | `"true"`  |
+| dockerhub                         | Log into DockerHub with a CI account (disabled for forks)                | false    | `"false"` |
 | dockerhub-readonly                | Log into DockerHub with a read-only account to avoid rate limits         | false    | `"false"` |
-| harbor                            | Log into Harbor with a Harbor robot account (disabled for fork PRs)      | false    | `"false"` |
-| minimus                           | Log into Minimus with a CI account (disabled for fork PRs)               | false    | `"false"` |
+| harbor                            | Log into Harbor with a Harbor robot account (disabled for forks)         | false    | `"false"` |
+| minimus                           | Log into Minimus with a CI account (disabled for forks)                  | false    | `"false"` |
 | java-distribution                 | Java distribution to install                                             | false    | `temurin` |
 | java-version                      | JDK version to install                                                   | false    | `"21"`    |
 | maven-cache-key-modifier          | Modifier for the Maven cache key                                         | false    | `shared`  |
