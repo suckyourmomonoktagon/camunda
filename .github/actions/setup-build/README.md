@@ -5,8 +5,8 @@
 Sets up the standard stack needed to build, install, and run monorepo projects, so
 individual jobs don't repeat the same bootstrap. In one step it:
 
-- detects fork PRs (via [`is-fork`](../is-fork)) and disables all credential-dependent
-  features when secrets aren't available;
+- detects fork repositories and fork PRs (via [`is-fork`](../is-fork)) and disables all
+  credential-dependent features when secrets aren't available;
 - imports CI secrets from Vault (Nexus, DockerHub, Minimus);
 - installs the JDK (`actions/setup-java`);
 - registers the Maven problem matcher and configures the Maven cache
@@ -16,7 +16,7 @@ individual jobs don't repeat the same bootstrap. In one step it:
 - optionally sets the build time zone;
 - optionally logs into DockerHub, Harbor, and Minimus.
 
-All credential features are **automatically disabled for fork PRs**, since Vault
+All credential features are **automatically disabled for forks**, since Vault
 secrets can't be retrieved there.
 
 GCS build-cache auth (WIF) is a separate, self-contained action —

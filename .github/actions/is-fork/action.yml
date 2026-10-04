@@ -4,7 +4,7 @@ name: Is Fork
 # owner: @camunda/engineering-operations
 
 description: |
-  Checks if current job runs on code from a forked repository (via PR).
+  Checks if the current job runs on code from a forked repository.
   This information can be used to disable certain CI features that are not
   available on forks (e.g. access to secrets).
 
@@ -21,6 +21,11 @@ runs:
   - id: detect-fork
     env:
       GH_EVENT_PR_FORK: ${{ github.event.pull_request.head.repo.fork }}
+      GH_REPOSITORY: ${{ github.repository }}
     shell: bash
     run: |
-      echo is-fork="$GH_EVENT_PR_FORK" | tee -a $GITHUB_OUTPUT
+      if [[ "$GH_EVENT_PR_FORK" == "true" || "$GH_REPOSITORY" != "camunda/camunda" ]]; then
+        echo is-fork=true | tee -a "$GITHUB_OUTPUT"
+      else
+        echo is-fork=false | tee -a "$GITHUB_OUTPUT"
+      fi
