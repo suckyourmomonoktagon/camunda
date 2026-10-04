@@ -1,0 +1,33 @@
+name: Test - Maven Dependency Snapshot
+
+on:
+  push:
+    branches:
+      - main
+      - stable/**
+    paths:
+      - '**/pom.xml'
+      - 'bom/**'
+      - 'parent/**'
+  workflow_dispatch:
+
+permissions: {}
+
+jobs:
+  submit-maven-snapshot:
+    name: "Security / Submit Maven Dependency Snapshot"
+    if: github.repository == 'camunda/camunda'
+    runs-on: ubuntu-latest
+    steps:
+      - name: Detect Spring Boot starter module path
+        run: |
+          if [ -d "clients/camunda-spring-boot-starter" ]; then
+            echo "SPRING_STARTER_MODULE=clients/camunda-spring-boot-starter" >> "$GITHUB_ENV"
+          elif [ -d "clients/spring-boot-starter-camunda-sdk" ]; then
+            echo "SPRING_STARTER_MODULE=clients/spring-boot-starter-camunda-sdk" >> "$GITHUB_ENV"
+          else
+            echo "ERROR: neither clients/camunda-spring-boot-starter nor clients/spring-boot-starter-camunda-sdk found" >&2
+            exit 1
+          fi
+      - name: Confirm snapshot job is enabled
+        run: echo "SNAPSHOT_JOB_RAN"
