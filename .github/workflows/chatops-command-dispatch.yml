@@ -9,7 +9,7 @@ on:
 
 jobs:
   dispatch-pr-command:
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request && github.repository == 'camunda/camunda' }}
     name: Dispatch PR Command
     runs-on: ubuntu-latest
     timeout-minutes: 5
