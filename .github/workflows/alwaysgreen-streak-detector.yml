@@ -65,8 +65,23 @@ jobs:
       - name: Check out repository
         uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
 
+      - name: Check Vault credentials
+        id: vault-config
+        env:
+          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
+          VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
+          VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+        run: |
+          if [[ -n "${VAULT_ADDR}" && -n "${VAULT_ROLE_ID}" && -n "${VAULT_SECRET_ID}" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Skipping Slack streak detection because Vault credentials are unavailable."
+          fi
+
       - name: Import Slack token from Vault
         id: slack-secrets
+        if: ${{ steps.vault-config.outputs.configured == 'true' }}
         uses: hashicorp/vault-action@892a26828f195e65540a40b4768ae4571f51ebfc # v4.0.0
         with:
           url: ${{ secrets.VAULT_ADDR }}
@@ -77,8 +92,13 @@ jobs:
           secrets: |
             secret/data/products/camunda/ci/github-actions SLACK_CORE_DOMAIN_BOT_TOKEN;
 
+      - name: Warn when Slack token is unavailable
+        if: ${{ steps.slack-secrets.outcome == 'success' && steps.slack-secrets.outputs.SLACK_CORE_DOMAIN_BOT_TOKEN == '' }}
+        run: echo "::warning::Skipping streak detection because the Slack token is unavailable in Vault."
+
       - name: Check streaks and update Slack
         id: streak-check
+        if: ${{ steps.slack-secrets.outputs.SLACK_CORE_DOMAIN_BOT_TOKEN != '' }}
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           SLACK_TOKEN: ${{ steps.slack-secrets.outputs.SLACK_CORE_DOMAIN_BOT_TOKEN }}
