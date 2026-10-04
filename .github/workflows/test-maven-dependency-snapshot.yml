@@ -20,6 +20,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Detect Spring Boot starter module path
+        if: false
         run: |
           if [ -d "clients/camunda-spring-boot-starter" ]; then
             echo "SPRING_STARTER_MODULE=clients/camunda-spring-boot-starter" >> "$GITHUB_ENV"
