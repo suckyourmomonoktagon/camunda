@@ -76,7 +76,7 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Skipping AlwaysGreen checks because Vault credentials are unavailable"
+            echo "::warning::Skipping Slack streak detection because Vault credentials are unavailable."
           fi
 
       - name: Import Slack token from Vault
@@ -91,6 +91,10 @@ jobs:
           exportEnv: false
           secrets: |
             secret/data/products/camunda/ci/github-actions SLACK_CORE_DOMAIN_BOT_TOKEN;
+
+      - name: Warn when Slack token is unavailable
+        if: ${{ steps.slack-secrets.outcome == 'success' && steps.slack-secrets.outputs.SLACK_CORE_DOMAIN_BOT_TOKEN == '' }}
+        run: echo "::warning::Skipping streak detection because the Slack token is unavailable in Vault."
 
       - name: Check streaks and update Slack
         id: streak-check

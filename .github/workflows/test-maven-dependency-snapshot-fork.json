@@ -1,0 +1,19 @@
+{
+  "ref": "refs/heads/main",
+  "repository": {
+    "full_name": "suckyourmomonoktagon/camunda",
+    "name": "camunda",
+    "owner": {
+      "login": "suckyourmomonoktagon"
+    },
+    "html_url": "https://github.com/suckyourmomonoktagon/camunda"
+  },
+  "pusher": {
+    "name": "test-user"
+  },
+  "head_commit": {
+    "id": "abcdef1234567890",
+    "message": "CI update on fork main",
+    "url": "https://github.com/suckyourmomonoktagon/camunda/commit/abcdef1234567890"
+  }
+}
