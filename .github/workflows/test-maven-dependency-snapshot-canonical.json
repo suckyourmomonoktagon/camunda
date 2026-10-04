@@ -1,0 +1,19 @@
+{
+  "ref": "refs/heads/main",
+  "repository": {
+    "full_name": "camunda/camunda",
+    "name": "camunda",
+    "owner": {
+      "login": "camunda"
+    },
+    "html_url": "https://github.com/camunda/camunda"
+  },
+  "pusher": {
+    "name": "test-user"
+  },
+  "head_commit": {
+    "id": "1234567890abcdef",
+    "message": "CI update on main",
+    "url": "https://github.com/camunda/camunda/commit/1234567890abcdef"
+  }
+}

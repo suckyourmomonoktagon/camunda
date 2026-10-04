@@ -27,6 +27,7 @@ env:
 jobs:
   submit-maven-snapshot:
     name: "Security / Submit Maven Dependency Snapshot"
+    if: github.repository == 'camunda/camunda'
     runs-on: ubuntu-latest
     timeout-minutes: 20
     permissions:
