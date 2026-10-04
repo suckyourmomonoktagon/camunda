@@ -19,6 +19,7 @@ env:
 jobs:
   assign-urgency-batch:
     runs-on: ubuntu-latest
+    if: github.repository == 'camunda/camunda'
     permissions:
       contents: read
     timeout-minutes: 15
