@@ -11,6 +11,8 @@ jobs:
   dispatch-pr-command:
     if: ${{ github.event.issue.pull_request && github.repository == 'camunda/camunda' }}
     name: Dispatch PR Command
+    permissions:
+      issues: write
     runs-on: ubuntu-latest
     timeout-minutes: 5
     steps:
