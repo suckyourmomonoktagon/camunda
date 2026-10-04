@@ -28,6 +28,7 @@ env:
 
 jobs:
   preview-env-clean:
+    if: github.repository == 'camunda/camunda'
     concurrency:
       group: clean-${{ github.workflow }}-${{ github.event.pull_request.number || github.ref_name }}
     runs-on: ubuntu-latest
