@@ -82,7 +82,7 @@ jobs:
 
       - name: Check Slack token availability
         if: ${{ steps.slack-secrets.outputs.SLACK_CORE_DOMAIN_BOT_TOKEN == '' }}
-        run: echo "::warning::Skipping streak checks because Vault credentials are unavailable."
+        run: echo "::warning::Skipping streak checks because the Slack token is unavailable."
 
       - name: Check streaks and update Slack
         id: streak-check
