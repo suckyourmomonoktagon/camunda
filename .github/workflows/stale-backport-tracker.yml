@@ -87,6 +87,7 @@ env:
 jobs:
   collect-stale-backports:
     name: Collect stale backport PRs
+    if: github.repository == 'camunda/camunda'
     runs-on: ubuntu-slim
     timeout-minutes: 10
     permissions:
@@ -487,7 +488,7 @@ jobs:
   summary:
     name: Generate workflow summary
     needs: collect-stale-backports
-    if: always()
+    if: always() && github.repository == 'camunda/camunda'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
