@@ -488,7 +488,7 @@ jobs:
   summary:
     name: Generate workflow summary
     needs: collect-stale-backports
-    if: always() && github.repository == 'camunda/camunda'
+    if: always() && github.repository == 'camunda/camunda' && needs.collect-stale-backports.result == 'success'
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions: {}
