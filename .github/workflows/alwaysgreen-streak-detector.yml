@@ -92,9 +92,9 @@ jobs:
           secrets: |
             secret/data/products/camunda/ci/github-actions SLACK_CORE_DOMAIN_BOT_TOKEN;
 
-      - name: Warn when Slack token is unavailable
+      - name: Check Slack token availability
         if: ${{ steps.slack-secrets.outcome == 'success' && steps.slack-secrets.outputs.SLACK_CORE_DOMAIN_BOT_TOKEN == '' }}
-        run: echo "::warning::Skipping streak detection because the Slack token is unavailable in Vault."
+        run: echo "::warning::Skipping streak checks because the Slack token is unavailable."
 
       - name: Check streaks and update Slack
         id: streak-check
