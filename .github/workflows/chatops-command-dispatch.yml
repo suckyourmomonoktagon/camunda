@@ -9,11 +9,12 @@ on:
 
 jobs:
   dispatch-pr-command:
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request && github.repository == 'camunda/camunda' }}
     name: Dispatch PR Command
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
+      issues: write
       pull-requests: write
     steps:
       - name: Create URL to the run output
@@ -34,7 +35,7 @@ jobs:
             echo "configured=true" >> "$GITHUB_OUTPUT"
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
-            echo "::warning::Skipping ChatOps command dispatch because Vault credentials are unavailable."
+            echo "::warning::Skipping PR command dispatch because Vault credentials are unavailable."
           fi
 
       - name: Generate a GitHub token
@@ -67,7 +68,6 @@ jobs:
         if: failure()
         uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
         with:
-          comment-id: ${{ github.event.comment.id }}
+          issue-number: ${{ github.event.issue.number }}
           body: |
             > Had issues fulfilling your command, check the [logs](${{ steps.vars.outputs.run_url }})
-          reactions: confused

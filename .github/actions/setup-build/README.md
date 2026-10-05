@@ -5,8 +5,8 @@
 Sets up the standard stack needed to build, install, and run monorepo projects, so
 individual jobs don't repeat the same bootstrap. In one step it:
 
-- detects fork PRs (via [`is-fork`](../is-fork)) and disables all credential-dependent
-  features when secrets aren't available;
+- detects fork repositories and fork PRs (via [`is-fork`](../is-fork)) and disables all
+  credential-dependent features when secrets aren't available;
 - imports CI secrets from Vault (Nexus, DockerHub, Minimus);
 - installs the JDK (`actions/setup-java`);
 - registers the Maven problem matcher and configures the Maven cache
@@ -16,7 +16,7 @@ individual jobs don't repeat the same bootstrap. In one step it:
 - optionally sets the build time zone;
 - optionally logs into DockerHub, Harbor, and Minimus.
 
-All credential features are **automatically disabled for fork PRs**, since Vault
+All credential features are **automatically disabled for forks**, since Vault
 secrets can't be retrieved there.
 
 GCS build-cache auth (WIF) is a separate, self-contained action —
@@ -37,11 +37,11 @@ Vault/WIF hang (see that action's README).
 
 |               Input               |                               Description                                | Required |  Default  |
 |-----------------------------------|--------------------------------------------------------------------------|----------|-----------|
-| camunda-nexus                     | Use Camunda Nexus as a Maven mirror (disabled for fork PRs)              | false    | `"true"`  |
-| dockerhub                         | Log into DockerHub with a CI account (disabled for fork PRs)             | false    | `"false"` |
+| camunda-nexus                     | Use Camunda Nexus as a Maven mirror (disabled for forks)                 | false    | `"true"`  |
+| dockerhub                         | Log into DockerHub with a CI account (disabled for forks)                | false    | `"false"` |
 | dockerhub-readonly                | Log into DockerHub with a read-only account to avoid rate limits         | false    | `"false"` |
-| harbor                            | Log into Harbor with a Harbor robot account (disabled for fork PRs)      | false    | `"false"` |
-| minimus                           | Log into Minimus with a CI account (disabled for fork PRs)               | false    | `"false"` |
+| harbor                            | Log into Harbor with a Harbor robot account (disabled for forks)         | false    | `"false"` |
+| minimus                           | Log into Minimus with a CI account (disabled for forks)                  | false    | `"false"` |
 | java-distribution                 | Java distribution to install                                             | false    | `temurin` |
 | java-version                      | JDK version to install                                                   | false    | `"21"`    |
 | maven-cache-key-modifier          | Modifier for the Maven cache key                                         | false    | `shared`  |
