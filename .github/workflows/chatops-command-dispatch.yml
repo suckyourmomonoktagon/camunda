@@ -11,12 +11,11 @@ jobs:
   dispatch-pr-command:
     if: ${{ github.event.issue.pull_request && github.repository == 'camunda/camunda' }}
     name: Dispatch PR Command
-    permissions:
-      issues: write
     runs-on: ubuntu-latest
     timeout-minutes: 5
     permissions:
       issues: write
+      pull-requests: write
     steps:
       - name: Create URL to the run output
         id: vars
@@ -28,11 +27,11 @@ jobs:
       - name: Check Vault credentials
         id: vault-config
         env:
-          VAULT_ADDR: ${{ secrets.VAULT_ADDR }}
-          VAULT_ROLE_ID: ${{ secrets.VAULT_ROLE_ID }}
-          VAULT_SECRET_ID: ${{ secrets.VAULT_SECRET_ID }}
+          VAULT_ADDR_PRESENT: ${{ secrets.VAULT_ADDR != '' }}
+          VAULT_ROLE_ID_PRESENT: ${{ secrets.VAULT_ROLE_ID != '' }}
+          VAULT_SECRET_ID_PRESENT: ${{ secrets.VAULT_SECRET_ID != '' }}
         run: |
-          if [[ -n "${VAULT_ADDR}" && -n "${VAULT_ROLE_ID}" && -n "${VAULT_SECRET_ID}" ]]; then
+          if [[ "${VAULT_ADDR_PRESENT}" == "true" && "${VAULT_ROLE_ID_PRESENT}" == "true" && "${VAULT_SECRET_ID_PRESENT}" == "true" ]]; then
             echo "configured=true" >> "$GITHUB_OUTPUT"
           else
             echo "configured=false" >> "$GITHUB_OUTPUT"
