@@ -9,32 +9,32 @@ inputs:
   camunda-nexus:
     description: |
       If enabled, Camunda Nexus will be configured and used as a mirror for Maven repositories
-      Camunda Nexus is automatically disabled for fork PRs.
+      Camunda Nexus is automatically disabled for forks.
     required: false
     default: "true"
   dockerhub:
     description: |
       If enabled, logs into DockerHub with a CI account.
-      DockerHub login is automatically disabled for fork PRs.
+      DockerHub login is automatically disabled for forks.
     required: false
     default: "false"
   dockerhub-readonly:
     description: |
       If enabled, logs into DockerHub with a read-only CI account.
       Useful to avoid being rate-limited when using an anonymous account from GitHub-managed runners.
-      DockerHub login is automatically disabled for fork PRs.
+      DockerHub login is automatically disabled for forks.
     required: false
     default: "false"
   harbor:
     description: |
       If enabled, logs into Harbor with a Harbor robot account.
-      Harbor login is automatically disabled for fork PRs.
+      Harbor login is automatically disabled for forks.
     required: false
     default: "false"
   minimus:
     description: |
       If enabled, logs into Minimus with a CI account.
-      Minimus login is automatically disabled for fork PRs.
+      Minimus login is automatically disabled for forks.
     required: false
     default: "false"
   java-distribution:

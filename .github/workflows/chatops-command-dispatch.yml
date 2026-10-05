@@ -9,10 +9,13 @@ on:
 
 jobs:
   dispatch-pr-command:
-    if: ${{ github.event.issue.pull_request }}
+    if: ${{ github.event.issue.pull_request && github.repository == 'camunda/camunda' }}
     name: Dispatch PR Command
     runs-on: ubuntu-latest
     timeout-minutes: 5
+    permissions:
+      issues: write
+      pull-requests: write
     steps:
       - name: Create URL to the run output
         id: vars
@@ -21,8 +24,23 @@ jobs:
             echo "run_url=https://github.com/$GITHUB_REPOSITORY/actions/runs/$GITHUB_RUN_ID"
           } >> "$GITHUB_OUTPUT"
 
+      - name: Check Vault credentials
+        id: vault-config
+        env:
+          VAULT_ADDR_PRESENT: ${{ secrets.VAULT_ADDR != '' }}
+          VAULT_ROLE_ID_PRESENT: ${{ secrets.VAULT_ROLE_ID != '' }}
+          VAULT_SECRET_ID_PRESENT: ${{ secrets.VAULT_SECRET_ID != '' }}
+        run: |
+          if [[ "${VAULT_ADDR_PRESENT}" == "true" && "${VAULT_ROLE_ID_PRESENT}" == "true" && "${VAULT_SECRET_ID_PRESENT}" == "true" ]]; then
+            echo "configured=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "configured=false" >> "$GITHUB_OUTPUT"
+            echo "::warning::Skipping PR command dispatch because Vault credentials are unavailable."
+          fi
+
       - name: Generate a GitHub token
         id: github-token
+        if: ${{ steps.vault-config.outputs.configured == 'true' }}
         uses: camunda/infra-global-github-actions/generate-github-app-token-from-vault-secrets@7fe5cca167f7826bedbc078ae36ff2e974cc8cb5 # generate-github-app-token-from-vault-secrets-1.1.2
         with:
           github-app-id-vault-key: GITHUB_OPTIMIZE_APP_ID
@@ -35,6 +53,7 @@ jobs:
           vault-url: ${{ secrets.VAULT_ADDR }}
 
       - name: Slash Command Dispatch
+        if: ${{ steps.vault-config.outputs.configured == 'true' }}
         uses: peter-evans/slash-command-dispatch@9bdcd7914ec1b75590b790b844aa3b8eee7c683a # v5.0.2
         with:
           token: ${{ steps.github-token.outputs.token }}
@@ -49,7 +68,6 @@ jobs:
         if: failure()
         uses: peter-evans/create-or-update-comment@e8674b075228eee787fea43ef493e45ece1004c9 # v5.0.0
         with:
-          comment-id: ${{ github.event.comment.id }}
+          issue-number: ${{ github.event.issue.number }}
           body: |
             > Had issues fulfilling your command, check the [logs](${{ steps.vars.outputs.run_url }})
-          reactions: confused
