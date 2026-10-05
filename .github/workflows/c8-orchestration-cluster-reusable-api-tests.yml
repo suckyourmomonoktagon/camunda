@@ -27,6 +27,7 @@ env:
 
 jobs:
   nightly-api-tests:
+    if: github.repository == 'camunda/camunda' || !startsWith(inputs.branch, 'stable/')
     name: API Tests (${{ inputs.branch }} - Mode ${{ inputs.camunda_mode }})
     runs-on: ubuntu-latest
     steps:
